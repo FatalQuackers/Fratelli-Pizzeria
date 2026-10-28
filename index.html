@@ -1,47 +1,452 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitHub Pages Test Website</title>
+    <title>Fratelli Pizzeria | Authentic Gourmet Pizza</title>
+    
+    <!-- Google Fonts: Montserrat for headings, Inter for body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@500;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#0a0a0a',
+                            card: '#141414',
+                            red: '#dc2626',
+                            redHover: '#b91c1c',
+                            orange: '#f97316'
+                        }
+                    },
+                    animation: {
+                        'spin-slow': 'spin 2s linear infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    
     <style>
+        /* Custom Styles for Loader and specific effects */
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f6f8fa;
-            color: #24292f;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
+            background-color: #0a0a0a;
+            color: #f3f4f6;
+            overflow-x: hidden;
         }
-        .container {
-            text-align: center;
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            border: 1px solid #d0d7de;
+
+        #loader {
+            transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
         }
-        h1 { color: #1f883d; margin-top: 0; }
-        p { color: #57606a; font-size: 1.1em; }
-        .badge {
-            background-color: #ddf4ff;
-            color: #0969da;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: 600;
+        
+        .loader-hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .glass-nav {
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Image hover zoom effect */
+        .card-img-wrapper {
+            overflow: hidden;
+        }
+        .card-img-wrapper img {
+            transition: transform 0.5s ease;
+        }
+        .menu-card:hover .card-img-wrapper img {
+            transform: scale(1.08);
         }
     </style>
 </head>
-<body>
+<body class="antialiased">
 
-    <div class="container">
-        <h1>🚀 Success!</h1>
-        <p>Your GitHub Pages site is live and rendering HTML perfectly.</p>
-        <span class="badge">Status: Online</span>
+    <!-- Loading Screen -->
+    <div id="loader" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-brand-dark">
+        <i class="fa-solid fa-pizza-slice text-brand-red text-7xl animate-spin-slow drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]"></i>
+        <h2 class="mt-6 text-2xl font-heading font-bold tracking-widest text-white uppercase">Fratelli Pizzeria</h2>
     </div>
 
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-nav transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="#home" class="flex items-center gap-2 group">
+                        <i class="fa-solid fa-pizza-slice text-brand-red text-2xl group-hover:rotate-12 transition-transform"></i>
+                        <span class="font-heading font-bold text-xl uppercase tracking-wider text-white">Fratelli</span>
+                    </a>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="text-gray-300 hover:text-brand-red font-medium transition-colors">Home</a>
+                    <a href="#menu" class="text-gray-300 hover:text-brand-red font-medium transition-colors">Menu</a>
+                    <a href="#locations" class="text-gray-300 hover:text-brand-red font-medium transition-colors">Locations</a>
+                    <a href="#order" class="bg-brand-red hover:bg-brand-redHover text-white px-6 py-2.5 rounded-full font-semibold transition-all shadow-[0_0_15px_rgba(220,38,38,0.3)] hover:shadow-[0_0_20px_rgba(220,38,38,0.5)]">
+                        Order Now
+                    </a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none p-2">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="md:hidden hidden bg-brand-dark/95 backdrop-blur-lg border-b border-zinc-800">
+            <div class="px-4 pt-2 pb-6 space-y-2 text-center flex flex-col">
+                <a href="#home" class="mobile-link block px-3 py-3 text-base font-medium text-gray-300 hover:text-white hover:bg-zinc-900 rounded-md">Home</a>
+                <a href="#menu" class="mobile-link block px-3 py-3 text-base font-medium text-gray-300 hover:text-white hover:bg-zinc-900 rounded-md">Menu</a>
+                <a href="#locations" class="mobile-link block px-3 py-3 text-base font-medium text-gray-300 hover:text-white hover:bg-zinc-900 rounded-md">Locations</a>
+                <a href="#order" class="mobile-link block mt-4 bg-brand-red text-white px-4 py-3 rounded-md font-semibold mx-4">Order Now</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative h-screen flex items-center justify-center text-center pt-20">
+        <!-- Background Image with Overlay -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=2000&auto=format&fit=crop" alt="Fresh Wood-fired Pizza" class="w-full h-full object-cover" />
+            <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-brand-dark"></div>
+        </div>
+
+        <!-- Hero Content -->
+        <div class="relative z-10 px-4 max-w-4xl mx-auto flex flex-col items-center">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-900/60 border border-zinc-700/50 backdrop-blur-sm mb-6">
+                <span class="w-2 h-2 rounded-full bg-brand-red animate-pulse"></span>
+                <span class="text-sm font-medium tracking-wide text-gray-300 uppercase">Wood-fired perfection</span>
+            </div>
+            <h1 class="text-5xl md:text-7xl font-heading font-extrabold text-white mb-6 leading-tight drop-shadow-lg">
+                Authentic <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-red to-brand-orange">Gourmet Pizza</span>
+            </h1>
+            <p class="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl font-light">
+                Handcrafted with passion. Experience the true taste of Italy right here in your neighborhood, baked to perfection in our traditional ovens.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                <a href="#menu" class="px-8 py-4 bg-brand-red hover:bg-brand-redHover text-white rounded-full font-bold text-lg transition-all shadow-[0_0_20px_rgba(220,38,38,0.4)] hover:-translate-y-1">
+                    View Menu
+                </a>
+                <a href="#locations" class="px-8 py-4 bg-transparent border-2 border-white text-white hover:bg-white hover:text-brand-dark rounded-full font-bold text-lg transition-all hover:-translate-y-1">
+                    Find Us
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="menu" class="py-24 bg-brand-dark relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-brand-red font-semibold tracking-wider uppercase mb-2">Our Selection</h2>
+                <h3 class="text-4xl md:text-5xl font-heading font-bold text-white">Explore The Menu</h3>
+                <div class="w-24 h-1 bg-brand-red mx-auto mt-6 rounded-full"></div>
+            </div>
+
+            <!-- Gourmet Pizzas -->
+            <div class="mb-16">
+                <h4 class="text-2xl font-heading font-bold text-white mb-8 flex items-center gap-3">
+                    <i class="fa-solid fa-star text-brand-orange"></i> Gourmet Pizzas
+                </h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Item 1 -->
+                    <div class="menu-card bg-brand-card rounded-2xl overflow-hidden border border-zinc-800 hover:border-brand-red/50 transition-colors shadow-lg group">
+                        <div class="card-img-wrapper h-56 w-full relative">
+                            <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&auto=format&fit=crop" alt="Chicken Peri Peri" class="w-full h-full object-cover" />
+                            <div class="absolute top-4 right-4 bg-brand-red text-white font-bold py-1 px-3 rounded-lg shadow-md">$23.00</div>
+                        </div>
+                        <div class="p-6">
+                            <h5 class="text-xl font-heading font-bold text-white mb-2 group-hover:text-brand-red transition-colors">Chicken Peri Peri</h5>
+                            <p class="text-gray-400 text-sm leading-relaxed mb-4">Marinated chicken breast, roasted capsicum, spanish onion, mozzarella, topped with our signature peri peri sauce.</p>
+                            <button class="w-full py-2.5 rounded-lg border border-zinc-700 text-white font-medium hover:bg-brand-red hover:border-brand-red transition-colors">Add to Order</button>
+                        </div>
+                    </div>
+                    <!-- Item 2 -->
+                    <div class="menu-card bg-brand-card rounded-2xl overflow-hidden border border-zinc-800 hover:border-brand-red/50 transition-colors shadow-lg group">
+                        <div class="card-img-wrapper h-56 w-full relative">
+                            <img src="https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?w=600&auto=format&fit=crop" alt="Double Cheeseburger" class="w-full h-full object-cover" />
+                            <div class="absolute top-4 right-4 bg-brand-red text-white font-bold py-1 px-3 rounded-lg shadow-md">$24.00</div>
+                        </div>
+                        <div class="p-6">
+                            <h5 class="text-xl font-heading font-bold text-white mb-2 group-hover:text-brand-red transition-colors">Double Cheeseburger</h5>
+                            <p class="text-gray-400 text-sm leading-relaxed mb-4">Ground beef, double cheddar cheese, pickles, red onion, ketchup, and mustard drizzle on a sesame crust.</p>
+                            <button class="w-full py-2.5 rounded-lg border border-zinc-700 text-white font-medium hover:bg-brand-red hover:border-brand-red transition-colors">Add to Order</button>
+                        </div>
+                    </div>
+                    <!-- Item 3 -->
+                    <div class="menu-card bg-brand-card rounded-2xl overflow-hidden border border-zinc-800 hover:border-brand-red/50 transition-colors shadow-lg group">
+                        <div class="card-img-wrapper h-56 w-full relative">
+                            <img src="https://images.unsplash.com/photo-1544982503-9f984c14501a?w=600&auto=format&fit=crop" alt="Mediterranean Lamb" class="w-full h-full object-cover" />
+                            <div class="absolute top-4 right-4 bg-brand-red text-white font-bold py-1 px-3 rounded-lg shadow-md">$25.00</div>
+                        </div>
+                        <div class="p-6">
+                            <h5 class="text-xl font-heading font-bold text-white mb-2 group-hover:text-brand-red transition-colors">Mediterranean Lamb</h5>
+                            <p class="text-gray-400 text-sm leading-relaxed mb-4">Slow-cooked lamb, feta cheese, kalamata olives, cherry tomatoes, baby spinach, finished with tzatziki.</p>
+                            <button class="w-full py-2.5 rounded-lg border border-zinc-700 text-white font-medium hover:bg-brand-red hover:border-brand-red transition-colors">Add to Order</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Traditional Pizzas & Pastas Split -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                
+                <!-- Traditional Pizzas -->
+                <div>
+                    <h4 class="text-2xl font-heading font-bold text-white mb-8 flex items-center gap-3">
+                        <i class="fa-solid fa-fire text-brand-orange"></i> Traditional Pizzas
+                    </h4>
+                    <div class="space-y-6">
+                        <!-- List Item -->
+                        <div class="flex gap-4 p-4 rounded-xl hover:bg-zinc-900 transition-colors border border-transparent hover:border-zinc-800 cursor-pointer">
+                            <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=200&auto=format&fit=crop" class="w-24 h-24 rounded-lg object-cover" alt="Margherita">
+                            <div class="flex-1">
+                                <div class="flex justify-between items-start mb-1">
+                                    <h5 class="text-lg font-heading font-bold text-white">Margherita</h5>
+                                    <span class="text-brand-red font-bold">$18.00</span>
+                                </div>
+                                <p class="text-gray-400 text-sm">San Marzano tomato base, fior di latte mozzarella, fresh basil, extra virgin olive oil.</p>
+                            </div>
+                        </div>
+                        <!-- List Item -->
+                        <div class="flex gap-4 p-4 rounded-xl hover:bg-zinc-900 transition-colors border border-transparent hover:border-zinc-800 cursor-pointer">
+                            <img src="https://images.unsplash.com/photo-1628840042765-356cda07504e?w=200&auto=format&fit=crop" class="w-24 h-24 rounded-lg object-cover" alt="Meat Lovers">
+                            <div class="flex-1">
+                                <div class="flex justify-between items-start mb-1">
+                                    <h5 class="text-lg font-heading font-bold text-white">Meat Lovers</h5>
+                                    <span class="text-brand-red font-bold">$22.00</span>
+                                </div>
+                                <p class="text-gray-400 text-sm">Pepperoni, smoked ham, Italian sausage, beef, bacon, BBQ sauce base.</p>
+                            </div>
+                        </div>
+                        <!-- List Item -->
+                        <div class="flex gap-4 p-4 rounded-xl hover:bg-zinc-900 transition-colors border border-transparent hover:border-zinc-800 cursor-pointer">
+                            <img src="https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=200&auto=format&fit=crop" class="w-24 h-24 rounded-lg object-cover" alt="Supreme">
+                            <div class="flex-1">
+                                <div class="flex justify-between items-start mb-1">
+                                    <h5 class="text-lg font-heading font-bold text-white">Supreme</h5>
+                                    <span class="text-brand-red font-bold">$22.00</span>
+                                </div>
+                                <p class="text-gray-400 text-sm">Pepperoni, ham, mushrooms, capsicum, onions, olives, pineapple.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pastas -->
+                <div>
+                    <h4 class="text-2xl font-heading font-bold text-white mb-8 flex items-center gap-3">
+                        <i class="fa-solid fa-bowl-food text-brand-orange"></i> Fresh Pastas
+                    </h4>
+                    <div class="space-y-6">
+                        <!-- List Item -->
+                        <div class="flex gap-4 p-4 rounded-xl hover:bg-zinc-900 transition-colors border border-transparent hover:border-zinc-800 cursor-pointer">
+                            <img src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=200&auto=format&fit=crop" class="w-24 h-24 rounded-lg object-cover" alt="Vodka Sauce Pasta">
+                            <div class="flex-1">
+                                <div class="flex justify-between items-start mb-1">
+                                    <h5 class="text-lg font-heading font-bold text-white">Vodka Sauce Pasta</h5>
+                                    <span class="text-brand-red font-bold">$20.00</span>
+                                </div>
+                                <p class="text-gray-400 text-sm">Penne tossed in a rich, creamy tomato and vodka sauce with a touch of chili and parmesan.</p>
+                            </div>
+                        </div>
+                        <!-- List Item -->
+                        <div class="flex gap-4 p-4 rounded-xl hover:bg-zinc-900 transition-colors border border-transparent hover:border-zinc-800 cursor-pointer">
+                            <img src="https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=200&auto=format&fit=crop" class="w-24 h-24 rounded-lg object-cover" alt="Boscaiola Pasta">
+                            <div class="flex-1">
+                                <div class="flex justify-between items-start mb-1">
+                                    <h5 class="text-lg font-heading font-bold text-white">Boscaiola Pasta</h5>
+                                    <span class="text-brand-red font-bold">$21.00</span>
+                                </div>
+                                <p class="text-gray-400 text-sm">Fettuccine with bacon, mushrooms, and garlic in a decadent creamy white wine sauce.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Locations & Hours Section -->
+    <section id="locations" class="py-24 bg-zinc-950 relative border-t border-zinc-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                
+                <!-- Info -->
+                <div>
+                    <h2 class="text-brand-red font-semibold tracking-wider uppercase mb-2">Visit Us</h2>
+                    <h3 class="text-4xl md:text-5xl font-heading font-bold text-white mb-8">Our Locations</h3>
+                    
+                    <div class="space-y-8">
+                        <!-- Location 1 -->
+                        <div class="bg-brand-card p-8 rounded-2xl border border-zinc-800 relative overflow-hidden">
+                            <div class="absolute top-0 right-0 w-32 h-32 bg-brand-red/5 rounded-full blur-3xl -mr-10 -mt-10"></div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 rounded-full bg-zinc-900 flex items-center justify-center flex-shrink-0 border border-zinc-700">
+                                    <i class="fa-solid fa-location-dot text-brand-red text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-2xl font-heading font-bold text-white mb-2">Beaumont Hills</h4>
+                                    <p class="text-gray-400 mb-4 text-sm leading-relaxed">
+                                        5/70 The Parkway,<br>
+                                        Beaumont Hills, NSW 2155
+                                    </p>
+                                    <div class="flex items-center gap-2 text-sm text-brand-orange font-medium">
+                                        <i class="fa-regular fa-clock"></i>
+                                        <span>Sun-Mon: 10:30 AM - 8:30 PM</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Location 2 -->
+                        <div class="bg-brand-card p-8 rounded-2xl border border-zinc-800 relative overflow-hidden">
+                            <div class="absolute top-0 right-0 w-32 h-32 bg-brand-orange/5 rounded-full blur-3xl -mr-10 -mt-10"></div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 rounded-full bg-zinc-900 flex items-center justify-center flex-shrink-0 border border-zinc-700">
+                                    <i class="fa-solid fa-shop text-brand-red text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-2xl font-heading font-bold text-white mb-2">Riverstone</h4>
+                                    <p class="text-gray-400 mb-4 text-sm leading-relaxed">
+                                        Serving the local Riverstone community with our signature authentic recipes.
+                                    </p>
+                                    <div class="flex items-center gap-2 text-sm text-brand-orange font-medium">
+                                        <i class="fa-solid fa-phone"></i>
+                                        <span>Call for delivery options</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Abstract Visual / Map Placeholder -->
+                <div class="h-[500px] w-full rounded-2xl overflow-hidden relative border border-zinc-800 group bg-zinc-900 flex items-center justify-center">
+                   <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity duration-700" alt="Restaurant Interior">
+                   <div class="relative z-10 text-center p-8 backdrop-blur-sm bg-black/40 border border-white/10 rounded-xl">
+                       <i class="fa-solid fa-map-location-dot text-4xl text-brand-red mb-4"></i>
+                       <h4 class="text-2xl font-heading font-bold text-white mb-2">Dine-in or Takeaway</h4>
+                       <p class="text-gray-300">Join us for a warm, family-friendly atmosphere.</p>
+                       <button class="mt-6 px-6 py-2 bg-white text-brand-dark rounded-full font-bold hover:bg-brand-red hover:text-white transition-colors">Get Directions</button>
+                   </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-brand-dark border-t border-zinc-900 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <!-- Logo -->
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-pizza-slice text-brand-red text-xl"></i>
+                    <span class="font-heading font-bold text-lg uppercase tracking-wider text-white">Fratelli Pizzeria</span>
+                </div>
+                
+                <!-- Links -->
+                <div class="flex flex-wrap justify-center gap-6 text-sm text-gray-400">
+                    <a href="#home" class="hover:text-brand-red transition-colors">Home</a>
+                    <a href="#menu" class="hover:text-brand-red transition-colors">Menu</a>
+                    <a href="#locations" class="hover:text-brand-red transition-colors">Locations</a>
+                    <a href="#" class="hover:text-brand-red transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-brand-red transition-colors">Terms of Service</a>
+                </div>
+
+                <!-- Socials -->
+                <div class="flex gap-4">
+                    <a href="#" class="w-10 h-10 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-gray-400 hover:text-white hover:bg-brand-red hover:border-brand-red transition-all">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-gray-400 hover:text-white hover:bg-brand-red hover:border-brand-red transition-all">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="mt-8 text-center text-gray-600 text-sm">
+                &copy; 2026 Fratelli Pizzeria. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Interactions -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Loading Screen Fade Out
+            const loader = document.getElementById('loader');
+            
+            // Ensures minimum display time for the cool pizza animation (2 seconds as requested)
+            setTimeout(() => {
+                loader.classList.add('loader-hidden');
+            }, 2000);
+
+            // 2. Mobile Menu Toggle
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+            
+            // Toggle menu visibility
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+                
+                // Change icon from hamburger to close (X)
+                const icon = mobileMenuBtn.querySelector('i');
+                if (mobileMenu.classList.contains('hidden')) {
+                    icon.classList.remove('fa-xmark');
+                    icon.classList.add('fa-bars');
+                } else {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-xmark');
+                }
+            });
+
+            // Close mobile menu when a link is clicked
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    const icon = mobileMenuBtn.querySelector('i');
+                    icon.classList.remove('fa-xmark');
+                    icon.classList.add('fa-bars');
+                });
+            });
+
+            // 3. Navbar scroll effect (add border/shadow when scrolling down)
+            const nav = document.querySelector('nav');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 20) {
+                    nav.classList.add('shadow-lg', 'shadow-black/50');
+                } else {
+                    nav.classList.remove('shadow-lg', 'shadow-black/50');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
